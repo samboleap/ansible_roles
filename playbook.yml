@@ -1,0 +1,15 @@
+---
+- name: Install Nginx and Apache
+  hosts: ansible_client
+  become: true
+
+  roles:
+    - role: nginx_role
+      when: inventory_hostname == 'server1'
+      notify: Reload Nginx
+
+    - role: apache_role
+      when: inventory_hostname == 'server2'
+      vars:
+        apache_listen_port: 9000
+      notify: Reload Apache

@@ -1,0 +1,39 @@
+---
+- name: Install Apache
+  apt: name=apache2 update_cache=yes state=latest
+- name: Create document root
+  file:
+    path: "/var/www/apache/html"
+    state: directory
+    owner: "root"
+    mode: '0755'
+
+- name: Copy index test page
+  template:
+    src: "templates/index.html"
+    dest: "/var/www/apache/html/index.html"
+
+- name: Set up Apache virtualhost
+  template:
+    src: "files/apache.conf"
+    dest: "/etc/apache2/sites-available/{{ http_conf }}"
+
+- name: Enable new site
+  shell: /usr/sbin/a2ensite {{ http_conf }}
+    #  notify: Reload Apache
+
+- name: Disable default Apache site
+  shell: /usr/sbin/a2dissite 000-default.conf
+  when: disable_default
+    #  notify: Reload Apache
+- name: Update Apache configuration
+  lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen'
+    line: 'Listen 9000'
+
+- name: Reload Apache
+  service:
+    name: apache2
+    state: reloaded
+    enabled: true

@@ -1,0 +1,5 @@
+---
+http_host: "apache"
+http_conf: "apache.conf"
+http_port: "9000"
+disable_default: true

@@ -1,0 +1,6 @@
+[ansible_master]
+master ansible_host=34.170.132.117
+
+[ansible_client]
+server1 ansible_host=104.197.223.202
+server2 ansible_host=104.197.107.159
